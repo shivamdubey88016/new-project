@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>All Details</h2>
+    <ul>
+        <li><%= listingl.title %></li>
+        <li><%= listingl.description %></li>
+        <li>&#8377;<%= listingl.price.toLocaleString("en-IN")%></li>
+        <li><%= listingl.location %></li>
+        <li><%=listingl.country %></li>
+        
+
+    </ul>
+    <a href="/listings/<%= listingl._id %>/edit">Edit these details</a>
+</body>
+</html>
