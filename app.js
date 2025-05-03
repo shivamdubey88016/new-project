@@ -2,6 +2,10 @@ const express= require('express');
 const app= express();
 const mongoose= require('mongoose');
 const path= require('path');
+//setting up ejs-mate
+const ejsmate= require('ejs-mate');
+app.engine('ejs', ejsmate);
+app.use(express.static(path.join(__dirname, '/public')));
 
 //setting up view engine
 app.set('view engine', 'ejs');
@@ -10,6 +14,7 @@ app.use(express.urlencoded({extended:true}));
 const listing=require("./models/listing.js");
 const methodOverride = require("method-override");
 app.use(methodOverride("_method"));
+
 app.listen(3000, () =>{
     console.log("server is running on port 3000");
 }
