@@ -1,3 +1,4 @@
+<% layout('layouts/boilerplate')%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,16 +7,36 @@
     <title>Document</title>
 </head>
 <body>
-    <h2>All Details</h2>
-    <ul>
-        <li><%= listingl.title %></li>
-        <li><%= listingl.description %></li>
-        <li>&#8377;<%= listingl.price.toLocaleString("en-IN")%></li>
-        <li><%= listingl.location %></li>
-        <li><%=listingl.country %></li>
-        
-
-    </ul>
-    <a href="/listings/<%= listingl._id %>/edit">Edit these details</a>
+    <div class="container my-5">
+        <div class="card shadow-lg" style="max-width: 700px; margin: auto;">
+          
+          
+          <img src="<%= listingl.image %>" class="card-img-top" alt="<%= listingl.title %>" style="object-fit: cover; height: 300px;">
+          
+         
+          <div class="card-header text-center bg-primary text-white">
+            <h3>Listing Details</h3>
+          </div>
+      
+         
+          <div class="card-body">
+            <h5 class="card-title"><strong>Title:</strong> <%= listingl.title %></h5>
+            <p class="card-text"><strong>Description:</strong> <%= listingl.description %></p>
+            <p class="card-text"><strong>Price:</strong> &#8377;<%= listingl.price.toLocaleString("en-IN") %></p>
+            <p class="card-text"><strong>Location:</strong> <%= listingl.location %></p>
+            <p class="card-text"><strong>Country:</strong> <%= listingl.country %></p>
+          </div>
+      
+         
+          <div class="card-footer d-flex justify-content-between">
+            <a href="/listings/<%= listingl._id %>/edit" class="btn btn-outline-primary">Edit</a>
+            <form method="POST" action="/listings/<%= listingl._id %>?_method=DELETE" onsubmit="return confirm('Are you sure you want to delete this listing?');">
+              <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+          </div>
+          
+        </div>
+      </div>
 </body>
+
 </html>

@@ -6,7 +6,8 @@ const path= require('path');
 const ejsmate= require('ejs-mate');
 app.engine('ejs', ejsmate);
 app.use(express.static(path.join(__dirname, '/public')));
-
+const wrapAsync= require('./utils/wrap.js');
+const xpressError = require("./utils/ExpressError.js");
 //setting up view engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -15,10 +16,8 @@ const listing=require("./models/listing.js");
 const methodOverride = require("method-override");
 app.use(methodOverride("_method"));
 
-app.listen(3000, () =>{
-    console.log("server is running on port 3000");
-}
-);
+
+
 //mongoose conection
 const mongoUrl='mongodb://127.0.0.1/wanderlust';
 async function main() {
@@ -35,24 +34,34 @@ app.get('/', (req, res) => {
 );
 app.get('/listings', async (req, res) => {
     const alllistings=await listing.find({})
-        console.log(res);
+        
         res.render("listings/index.ejs", {alllistings});
     
 });
+
 
  //new listing route
  app.get("/listings/new", (req, res) => {
     res.render("listings/new.ejs");
    });
    // create listing route
-   app.post("/listings", async (req, res) => {
-    const newlisting = new listing(req.body);
-    await newlisting.save();
-    res.redirect("/listings");
-   });
-  
+   app.post("/listings",wrapAsync(async(req, res) => {
 
    
+    const newlisting = new listing(req.body.listing);
+    await newlisting.save();
+    res.redirect("/listings");
+    
+   }));
+
+     
+    
+
+   
+  
+  
+ 
+    
    //edit listing route
 app.get("/listings/:id/edit", async (req, res) => {
     let { id } = req.params;
@@ -64,7 +73,7 @@ app.get("/listings/:id/edit", async (req, res) => {
   app.put("/listings/:id", async (req, res) => {
     let { id } = req.params;
     await listing.findByIdAndUpdate(id, { ...req.body.listing });
-    res.redirect(`/listings`);
+    res.redirect("/listings");
   });
   //delete route
   app.delete("/listings/:id", async (req, res) => {
@@ -78,5 +87,22 @@ app.get("/listings/:id/edit", async (req, res) => {
     const listingl = await listing.findById(id);
     res.render("listings/show.ejs", { listingl });
   }); 
-  
  
+
+
+  app.use((err, req, res, next) => {
+    let { statusCode , message  } = err;
+   res.render("error.ejs");
+  });
+  //our middleware
+  
+    
+
+
+  app.listen(3000, () =>{
+    console.log("server is running on port 3000");
+}
+);
+ app.all("",(req, res,next) => {
+    next(new xpressError("Page not found", 404));
+  });
