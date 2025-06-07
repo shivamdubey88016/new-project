@@ -1,19 +1,33 @@
 <% layout("/layouts/boilerplate") %>
 
+<style>
+  .login-card {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 1.5rem;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    /* margin-left: 35%;  Remove this line */
+  }
+  /* ...rest of your styles... */
+</style>
 
-<div class="container mt-5">
-  <h1>login</h1>
-  <form action="/login" method="POST">
-    <div class="mb-3">
-      <label for="username" class="form-label">Username:</label>
-      <input type="text" name="username" class="form-control" required />
-    </div>
-    
-    <div class="mb-3">
-      <label for="password" class="form-label">Password:</label>
-      <input type="password" name="password" class="form-control" required />
-    </div>
-    <button type="submit" class="btn btn-primary">login</button>
-  </form>
+<div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+  <div class="login-card">
+    <h2>Welcome Back!</h2>
+    <form action="/login" method="POST">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" class="form-control" required />
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" class="form-control" required />
+
+      <button type="submit" class="btn-custom">Login</button>
+
+      <p class="text-muted mt-3">
+        Don't have an account? <a href="/signup">Sign up</a>
+      </p>
+    </form>
+  </div>
 </div>
-

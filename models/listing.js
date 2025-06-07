@@ -1,25 +1,44 @@
-const mongoose= require('mongoose');
-const schema=mongoose.Schema;
-const listingschema=new schema({
-    title:{type: String ,
-        required:true,
-    }
-    ,
-    description:String,
-    image:{type: String ,
-        default:"https://th.bing.com/th/id/OIP.jHvTOSF7924Ah63W7mozxQHaEo?rs=1&pid=ImgDetMain"
-     , set:(v)=>v===""? "https://th.bing.com/th/id/OIP.jHvTOSF7924Ah63W7mozxQHaEo?rs=1&pid=ImgDetMain": v,  
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+
+const listingSchema = new Schema({
+  title: {
+    type: String,
+    required: true,
+  },
+  description: String,
+  image: {
+    url: String,
+    filename: String,
+  },
+  price: Number,
+  location: String,
+  country: String,
+  reviews: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Review",
     },
-    price:Number,
-    location:String,
-    country:String,
+  ],
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref:"User",
+    
+  },
+  geometry: {
+    type: {
+      type: String, // Don't do `{ location: { type: String } }`
+      enum: ['Point'], // 'location.type' must be 'Point'
+      required: true
+    },
+    coordinates: {
+      type: [Number],
+      required: true
+    },
+  },
+  
+    
 });
 
-
-
-
-
-
-const listing=mongoose.model("listing",listingschema);
-module.exports=listing;
-
+const Listing = mongoose.model("Listing", listingSchema);
+module.exports = Listing;

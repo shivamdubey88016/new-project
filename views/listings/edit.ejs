@@ -4,7 +4,7 @@
 <div class="container my-5" style="max-width: 700px;">
   <h3 class="text-center mb-4">Edit Your Listing</h3>
 
-  <form method="POST" action="/listings/<%= listingl._id %>?_method=PUT" class="needs-validation" novalidate>
+  <form method="POST" action="/listings/<%= listingl._id %>?_method=PUT" class="needs-validation" novalidate  enctype="multipart/form-data">
     <div class="mb-3">
       <label for="title" class="form-label">Title</label>
       <input 
@@ -28,16 +28,21 @@
       <div class="invalid-feedback">Please enter a description.</div>
     </div>
 
+     <div class="mb-3">
+      Original Image:<br>
+      <img src="<%= original %>" >
+    </div>
+ 
     <div class="mb-3">
-      <label for="image" class="form-label">Image URL</label>
+      <label for="image" class="form-label">Image upload</label>
       <input 
-        type="url" 
+        type="file" 
         class="form-control" 
         id="image" 
         name="listing[image]" 
-        value="<%= listingl.image %>" 
-        required>
-      <div class="invalid-feedback">Please enter a valid image URL.</div>
+    
+        />
+      
     </div>
 
     <div class="mb-3">

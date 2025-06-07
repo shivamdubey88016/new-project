@@ -1,22 +1,56 @@
 <% layout("/layouts/boilerplate") %>
 
+<style>
+  .signup-card {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 1.5rem;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+  }
+  .btn-custom {
+    background-color: #f97316;
+    color: white;
+    border-radius: 0.75rem;
+    transition: background-color 0.3s ease;
+  }
+  .btn-custom:hover {
+    background-color: #c2410c;
+  }
+  h2 {
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+  }
+</style>
 
-<div class="container mt-5">
-  <h1>Sign Up</h1>
-  <form action="/signup" method="POST">
-    <div class="mb-3">
-      <label for="username" class="form-label">Username:</label>
-      <input type="text" name="username" class="form-control" required />
-    </div>
-    <div class="mb-3">
-      <label for="email" class="form-label">Email:</label>
-      <input type="email" name="email" class="form-control" required />
-    </div>
-    <div class="mb-3">
-      <label for="password" class="form-label">Password:</label>
-      <input type="password" name="password" class="form-control" required />
-    </div>
-    <button type="submit" class="btn btn-primary">signup</button>
-  </form>
+<div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+  <div class="signup-card">
+    <h2>Create an Account</h2>
+    <form action="/signup" method="POST">
+      <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input type="text" id="username" name="username" class="form-control" required />
+      </div>
+
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" id="email" name="email" class="form-control" required />
+      </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" id="password" name="password" class="form-control" required />
+      </div>
+
+      <div class="d-grid mb-3">
+        <button type="submit" class="btn btn-custom">Sign Up</button>
+      </div>
+
+      <p class="text-center text-muted mt-3 mb-0">
+        Already have an account? <a href="/login">Login</a>
+      </p>
+    </form>
+  </div>
 </div>
-
