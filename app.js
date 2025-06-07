@@ -1,122 +1,96 @@
 if (process.env.NODE_ENV !== "production") {
-
   require('dotenv').config();
 }
 
-const express= require('express');
-const app= express();
-const mongoose= require('mongoose');
-const path= require('path');
-//const listingSchema=require('./schema.js');
-//setting up ejs-mate
-const ejsmate= require('ejs-mate');
-app.engine('ejs', ejsmate);
-app.use(express.static(path.join(__dirname, '/public')));
-const session= require('express-session');
+const express = require('express');
+const app = express();
+const mongoose = require('mongoose');
+const path = require('path');
+const ejsmate = require('ejs-mate');
+const session = require('express-session');
 const MongoStore = require('connect-mongo');
-const flash= require('connect-flash');
-
-//setting up multer for file uploads
-
-//setting up view engine
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-app.use(express.urlencoded({extended:true}));
-const listing=require("./models/listing.js");
-const review=require("./models/review.js");
-
-const methodOverride = require("method-override"); 
-app.use(methodOverride("_method"));
+const flash = require('connect-flash');
+const methodOverride = require("method-override");
 const passport = require("passport");
 const localStrategy = require("passport-local");
 const User = require("./models/user.js");
-const listingRoutes=require('./routes/listings.js');
-const reviewRoutes=require('./routes/reviewRoute.js');
-const userRoutes=require('./routes/user.js');
+const listingRoutes = require('./routes/listings.js');
+const reviewRoutes = require('./routes/reviewRoute.js');
+const userRoutes = require('./routes/user.js');
 
-//mongoose conection
-//const mongoUrl='mongodb://127.0.0.1/wanderlust';
-const mongoUrl=process.env.MONGO_ATLAS
+// View engine setup
+app.engine('ejs', ejsmate);
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(path.join(__dirname, '/public')));
+app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride("_method"));
+
+// Mongoose connection
+const mongoUrl = process.env.MONGO_ATLAS;
 async function main() {
-    await mongoose.connect(mongoUrl);}
-main().then(() => {console.log("connected to database");})
-.catch(err => {console.log(err);});
+  await mongoose.connect(mongoUrl, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+}
+main()
+  .then(() => { console.log("connected to database"); })
+  .catch(err => { console.log("Mongoose connection error:", err); });
 
-//setting up the session store
- const store=MongoStore.create({
+// Session store setup
+const store = MongoStore.create({
+  mongoUrl,
+  crypto: {
+    secret: process.env.SECRET1,
+  },
+  touchAfter: 24 * 3600, // time period in seconds
+});
+store.on("error", function (e) {
+  console.log("session store error", e);
+});
 
-    mongoUrl,
-    crypto: {
-      secret:process.env.SECRET1,},
-      touchAfter: 24 * 3600, // time period in seconds
-
-    });
-    store.on("error", function(e) {
-
-        console.log("session store error", e);
-
-    });
-
-//session middleware
-
-const sessionOption={
-   store:store,
-    
+// Session middleware
+const sessionOption = {
+  store: store,
   secret: process.env.SECRET2,
-    resave:false,
-    saveUninitialized:true,
-    cookie:{
-        httpOnly:true,
-        maxAge:1000*60*60*24*7,
-        expires:new Date(Date.now()+1000*60*60*24*7)
-    },
-  };
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+    expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7)
+  },
+};
+app.use(session(sessionOption));
+app.use(flash());
 
-    app.use(session(sessionOption));
-    app.use(flash());
-//passport middleware
+// Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new localStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// Flash and user locals
+app.use((req, res, next) => {
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  res.locals.currentUser = req.user;
+  next();
+});
 
-
-  app.use((req, res, next) => {
-    res.locals.success = req.flash("success");
-    res.locals.error = req.flash("error");
-    res.locals.currentUser = req.user;
-    next();
-  }); 
-
-
-    
+// Routes
 app.use("/listings", listingRoutes);
 app.use("/listings/:id/reviews", reviewRoutes);
 app.use("/", userRoutes);
- 
-  
 
-     
-    
+// Root route to prevent "Cannot GET /"
+app.get('/', (req, res) => {
+  res.redirect('/listings');
+});
 
-   
-  
-  
- 
-    
-   
- 
-
- 
-
-
-  
-   
-  app.listen(3000, () =>{
-    console.log("server is running on port 3000");
-}
-);
- 
-  
+// Start server
+app.listen(3000, () => {
+  console.log("server is running on port 3000");
+});
