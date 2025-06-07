@@ -1,35 +1,38 @@
 /* Global Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 /* Base Body Styles */
 body {
   color: rgb(20, 19, 19);
-  background-color: rgb(232, 170, 89);
-  display: flex;
-  flex-direction: column;
-  max-width: 100%;
-   
-      background: linear-gradient(to bottom right, #e0f7fa, #ffffff);
-      font-family: 'Segoe UI', sans-serif;
-      
-    
+  background: linear-gradient(to bottom right, #e0f7fa, #ffffff);
+  font-family: 'Segoe UI', sans-serif;
+  min-height: 130vh;
+  width: 100%;
+  position: relative;
 }
 
 /* Navbar */
 .navbar {
   background: linear-gradient(to right, #00c6ff, #ca5a0f);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  height: 60px;
+  min-height: 60px;
   width: 100%;
 }
 
 .navbar-brand {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #fff !important;
+  color: black !important;
 }
 
 .nav-link {
-  color: #f1f1f1 !important;
+  color: #000000 !important;
   font-weight: 500;
   margin-left: 1rem;
   transition: color 0.3s ease;
@@ -60,14 +63,12 @@ body {
 /* Footer */
 footer {
   background-color: #000000;
-  color: #372b2b;
+  color: #fff;
   text-align: center;
-  height: 100px;
+  min-height: 60px;
   width: 100%;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  
+  position: static;
+  padding: 1rem 0;
 }
 
 .if-info-socials a {
@@ -185,6 +186,7 @@ form button:hover {
   transform: translateY(-5px);
 }
 
+/* Switch */
 .switch {
   display: flex;
   justify-content: center;
@@ -204,6 +206,8 @@ form button:hover {
   box-shadow: 0 4px 16px rgba(0,0,0,0.10);
   border-color: #0056b3;
 }
+
+/* Star Rating */
 .star-rating {
   font-size: 1.25rem;
   color: #ffc107;
@@ -216,14 +220,17 @@ form button:hover {
 .star.filled {
   color: #ffc107;
 }
+
+/* Navbar Nav */
 .navbar-nav {
   height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: auto;
-
 }
+
+/* Outline Success Button */
 .btn-outline-success {
   color: #198754;
   border: 1.5px solid #198754;
@@ -242,4 +249,99 @@ form button:hover {
   background: #198754;
   color: #fff;
   border-color: #145c32;
+}
+
+/* Filters Bar */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.filter {
+  min-width: 90px;
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  transition: box-shadow 0.2s, color 0.2s, background 0.2s;
+  opacity: 0.92;
+  color: #333;
+  font-size: 1rem;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.filter i {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+.filter:hover, .filter:focus {
+  color: #ca7404;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+  background: #ffe5b4;
+  outline: none;
+}
+
+/* Tax Info */
+.tax-info {
+  display: none;
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+  .card {
+    width: 100% !important;
+    max-width: 22rem;
+  }
+  .row {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .filter {
+    min-width: 70px;
+    font-size: 0.95rem;
+    padding: 0.5rem 0.5rem;
+  }
+  .filter i {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  body {
+    font-size: 0.97rem;
+    padding: 0.5rem;
+  }
+  .container, .container-fluid {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  .card {
+    width: 100% !important;
+    min-width: unset;
+    margin-bottom: 1rem;
+  }
+  .row {
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .filters {
+    display: none !important;
+  }
+  .card {
+    width: 100% !important;
+  }
+  body {
+    padding: 0.5rem;
+  }
 }
