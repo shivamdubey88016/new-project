@@ -1,33 +1,40 @@
-<nav class="navbar navbar-expand-md bg-body-tertiary border-bottom ">
-    <div class="container-fluid">
-      <a class="navbar-brand d-flex align-items-center" href="/listings">
-        <i class="fa-regular fa-compass me-2"></i>
-        <span class="fw-bold">StayFinder</span>
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
+<nav class="navbar navbar-expand-md bg-body-tertiary border-bottom">
+  <div class="container-fluid">
+    <a class="navbar-brand d-flex align-items-center" href="/listings">
+      <i class="fa-regular fa-compass me-2"></i>
+      <span class="fw-bold">StayFinder</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <ul class="navbar-nav w-100 mb-2 mb-md-0 align-items-center">
+        <li class="nav-item">
           <a class="nav-link" href="/listings">EXPLORE</a>
-           <a class="nav-link" href="/listings/new">ADD NEW </a>
-        </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/listings/new">ADD NEW</a>
+        </li>
+        <li class="nav-item flex-grow-1"></li> <!-- Spacer pushes next items to right -->
+        <% if (!currentUser) { %>
+          <li class="nav-item">
+            <a class="nav-link" href="/signup">Signup</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/login">Login</a>
+          </li>
+        <% } %>
+        <% if (currentUser) { %>
+          <li class="nav-item">
+            <form class="d-flex my-2 my-md-0" role="search" action="/listings" method="get">
              
-        <div class="navbar-nav ms-auto">
-         
-         
-          <% if(!currentUser){%>
-            <a class="nav-link" href="/signup">signup</a>
-            <a class="nav-link" href="/login">login</a>
-          <% } %>
-          <% if(currentUser){%>
-
-             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-          <button class="btn btn-outline-success" type="submit"><a href="/listings" >go</a></button>
-            <a class="nav-link" href="/logout">logout</a>
-            
-          <% } %>
-        </div>
-      </div>
+            </form>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Logout</a>
+          </li>
+        <% } %>
+      </ul>
     </div>
+  </div>
 </nav>
