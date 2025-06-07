@@ -345,3 +345,20 @@ form button:hover {
     padding: 0.5rem;
   }
 }
+#btnpayment{
+
+  background-color: #0c0c0d;
+  color: rgb(198, 225, 42);
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  border: none;
+  transition: background-color 0.3s, color 0.3s;
+}
+.btn-primary{
+  background-color: #1b211b;
+  border-color: #0c0c0d;
+  color: rgb(198, 225, 42);
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  transition: background-color 0.3s, border-color 0.3s;
+}

@@ -120,6 +120,7 @@
       <p><strong>Price:</strong> ₹<%= listingl.price.toLocaleString("en-IN") %></p>
       <p><strong>Location:</strong> <%= listingl.location %></p>
       <p><strong>Country:</strong> <%= listingl.country %></p>
+      <p> <a href="/checkout/<%= listingl._id %>" class="btn btn-primary mt-2 w-100">Book Now</a></p>
     </div>
 
     <% if(currentUser && currentUser._id.equals(listingl.owner._id)) { %>

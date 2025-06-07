@@ -1,0 +1,8 @@
+<% layout('layouts/boilerplate') %>
+<h2>Checkout for <%= listing.title %></h2>
+<p>Price: ₹<%= listing.price %></p>
+<form action="/create-checkout-session" method="POST">
+  <input type="hidden" name="price" value="<%= listing.price %>">
+  <input type="hidden" name="listingId" value="<%= listing._id %>">
+  <button type="submit" class="btn btn-primary">Pay with Card</button>
+</form>

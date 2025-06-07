@@ -1,7 +1,8 @@
 if (process.env.NODE_ENV !== "production") {
   require('dotenv').config();
 }
-
+// ...other requires...
+const Listing = require('./models/listing'); // Adjust the path if your model is elsewhere
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
@@ -89,6 +90,63 @@ app.use("/", userRoutes);
 app.get('/', (req, res) => {
   res.redirect('/listings');
 });
+
+// ...existing code...
+const Stripe = require('stripe');
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+
+// ...existing code...
+
+// Payment checkout route (renders EJS form)
+app.get('/checkout/:listingId', async (req, res) => {
+  const { listingId } = req.params;
+  // Fetch listing from DB (pseudo-code, adjust as needed)
+  const listing = await Listing.findById(listingId);
+  res.render('checkout', {
+    listing,
+    stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY
+  });
+});
+
+// Payment processing route
+app.post('/create-checkout-session', async (req, res) => {
+  const { price, listingId } = req.body;
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ['card'],
+    line_items: [{
+      price_data: {
+        currency: 'inr',
+        product_data: {
+          name: `Listing #${listingId}`,
+        },
+        unit_amount: parseInt(price) * 100, // price in paise
+      },
+      quantity: 1,
+    }],
+    mode: 'payment',
+    success_url: `${req.protocol}://${req.get('host')}/success`,
+    cancel_url: `${req.protocol}://${req.get('host')}/cancel`,
+  });
+  res.redirect(303, session.url);
+});
+
+// Success and cancel routes
+app.get('/success', (req, res) => {
+  res.render('success');
+});
+app.get('/cancel', (req, res) => {
+  res.render('cancel');
+});
+
+// ...existing code...
+
+
+
+
+
+
+
+
 
 // Start server
 app.listen(3000, () => {

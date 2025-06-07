@@ -146,6 +146,7 @@
               <strong>Location:</strong> <%= listing.location %><br>
               <strong>Price:</strong> ₹<%= listing.price.toLocaleString("en-IN") %>/night<i class="tax-info">+18% Gst</i><br>
               <strong>Country:</strong> <%= listing.country %>
+               <a href="/checkout/<%= listing._id %>" class="btn btn-primary" id="btnpayment">Book Now</a>
             </p>
           </div>
         </div>
