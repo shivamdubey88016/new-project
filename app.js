@@ -1,8 +1,7 @@
 if (process.env.NODE_ENV !== "production") {
   require('dotenv').config();
 }
-// ...other requires...
-const Listing = require('./models/listing'); // Adjust the path if your model is elsewhere
+
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
@@ -15,6 +14,7 @@ const methodOverride = require("method-override");
 const passport = require("passport");
 const localStrategy = require("passport-local");
 const User = require("./models/user.js");
+const Listing = require('./models/listing'); // Make sure this path is correct
 const listingRoutes = require('./routes/listings.js');
 const reviewRoutes = require('./routes/reviewRoute.js');
 const userRoutes = require('./routes/user.js');
@@ -93,22 +93,23 @@ app.get('/', (req, res) => {
   res.redirect('/listings');
 });
 
-// ...existing code...
+// Stripe Payment Routes
 
-// ...existing code...
-
-// Payment checkout route (renders EJS form)
+// Checkout page
 app.get('/checkout/:listingId', async (req, res) => {
   const { listingId } = req.params;
-  // Fetch listing from DB (pseudo-code, adjust as needed)
   const listing = await Listing.findById(listingId);
+  if (!listing) {
+    req.flash('error', 'Listing not found');
+    return res.redirect('/listings');
+  }
   res.render('checkout', {
     listing,
     stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY
   });
 });
 
-// Payment processing route
+// Create Stripe Checkout Session
 app.post('/create-checkout-session', async (req, res) => {
   const { price, listingId } = req.body;
   const session = await stripe.checkout.sessions.create({
@@ -137,16 +138,6 @@ app.get('/success', (req, res) => {
 app.get('/cancel', (req, res) => {
   res.render('cancel');
 });
-
-// ...existing code...
-
-
-
-
-
-
-
-
 
 // Start server
 app.listen(3000, () => {
