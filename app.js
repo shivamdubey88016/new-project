@@ -18,6 +18,8 @@ const User = require("./models/user.js");
 const listingRoutes = require('./routes/listings.js');
 const reviewRoutes = require('./routes/reviewRoute.js');
 const userRoutes = require('./routes/user.js');
+const Stripe = require('stripe');
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 // View engine setup
 app.engine('ejs', ejsmate);
@@ -92,8 +94,6 @@ app.get('/', (req, res) => {
 });
 
 // ...existing code...
-const Stripe = require('stripe');
-const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 // ...existing code...
 
