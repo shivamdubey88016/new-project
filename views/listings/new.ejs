@@ -96,10 +96,51 @@
           <div class="text-center mt-4">
             <button type="submit" class="btn btn-dark">Add</button>
           </div>
+<div class="mb-3">
+  <label for="title" class="form-label">Title</label>
+  <input type="text" id="title" name="title" class="form-control">
+</div>
+<div class="mb-3">
+  <label for="description" class="form-label">Description</label>
+  <textarea id="description" name="description" class="form-control"></textarea>
+  <button type="button" class="btn btn-secondary mt-2" id="aiSuggestBtn">Suggest with AI</button>
+</div>
 
         </form>
       </div>
     </div>
   </div>
 </div>
- 
+<script>
+document.getElementById('aiSuggestBtn').onclick = async function() {
+  const title = document.getElementById('title').value;
+  if (!title) return alert('Enter a title first!');
+  const res = await fetch('/ai/description', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ title })
+  });
+  const data = await res.json();
+  if (data.description) {
+    document.getElementById('description').value = data.description;
+  } else {
+    alert('AI suggestion failed.');
+  }
+};
+</script>
+<% if (success && success.length > 0) { %>
+  <script>
+    if ('speechSynthesis' in window) {
+      const msg = new SpeechSynthesisUtterance("<%= success[0].replace(/"/g, '') %>");
+      window.speechSynthesis.speak(msg);
+    }
+  </script>
+<% } %>
+<% if (error && error.length > 0) { %>
+  <script>
+    if ('speechSynthesis' in window) {
+      const msg = new SpeechSynthesisUtterance("<%= error[0].replace(/"/g, '') %>");
+      window.speechSynthesis.speak(msg);
+    }
+  </script>
+<% } %>

@@ -2,6 +2,11 @@ if (process.env.NODE_ENV !== "production") {
   require('dotenv').config();
 }
 
+const OpenAI = require("openai");
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+// ... rest of your requires ...
+
+
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
@@ -20,7 +25,7 @@ const reviewRoutes = require('./routes/reviewRoute.js');
 const userRoutes = require('./routes/user.js');
 const Stripe = require('stripe');
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
-
+app.use(express.json());
 // View engine setup
 app.engine('ejs', ejsmate);
 app.set('view engine', 'ejs');
@@ -142,4 +147,30 @@ app.get('/cancel', (req, res) => {
 // Start server
 app.listen(3000, () => {
   console.log("server is running on port 3000");
+});
+
+//ai setup
+// Add at the top with other requires
+
+
+// OpenAI setup
+
+
+// AI Suggestion Route
+app.post('/ai/description', async (req, res) => {
+  const { title } = req.body;
+  try {
+    const completion = await openai.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: [
+        { role: "system", content: "You are a helpful assistant for real estate listings." },
+        { role: "user", content: `Suggest a catchy and detailed description for a property titled: "${title}"` }
+      ],
+      max_tokens: 100
+    });
+    const aiDescription = completion.data.choices[0].message.content.trim();
+    res.json({ description: aiDescription });
+  } catch (err) {
+    res.status(500).json({ error: "AI suggestion failed." });
+  }
 });
